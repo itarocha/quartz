@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="instance" type="TInstance"/>
+
+  <!-- Pode ser colocado em qualquer ordem. É obrigatório. Elemento PT_BR é obrigatório. Outros são opcionais -->
+  <xs:complexType name="TDescriptions">
+    <xs:all maxOccurs="1">
+      <xs:element type="xs:string" name="PT_BR" maxOccurs="1"/>
+      <xs:element type="xs:string" name="EN_US" minOccurs="0" maxOccurs="1"/>
+      <xs:element type="xs:string" name="ES_ES" minOccurs="0" maxOccurs="1"/>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="TField">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="localName" use="optional"/>
+        <xs:attribute type="xs:string" name="targetName" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="TFields" mixed="true">
+    <xs:sequence>
+      <xs:element type="TField" name="field" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="TRelation">
+    <xs:choice maxOccurs="unbounded" minOccurs="0">
+      <xs:element type="xs:string" name="expression"/>
+      <xs:element type="xs:string" name="condition" minOccurs="0"/>
+      <xs:element type="TFields" name="fields"/>
+    </xs:choice>
+    <xs:attribute type="xs:string" name="toEntity" use="optional"/>
+    <xs:attribute type="xs:string" name="type" use="optional"/>
+    <xs:attribute type="xs:string" name="insert" use="optional"/>
+    <xs:attribute type="xs:string" name="update" use="optional"/>
+    <xs:attribute type="xs:string" name="remove" use="optional"/>
+  </xs:complexType>
+
+  <xs:complexType name="TRelationships" mixed="true">
+    <xs:sequence>
+      <xs:element type="TRelation" name="relation" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="TInstance">
+    <xs:choice maxOccurs="unbounded" minOccurs="0">
+      <xs:element type="TDescriptions" name="descriptions"/>
+      <xs:element type="TRelationships" name="relationships"/>
+      <xs:element type="xs:string" name="expression"/>
+      <xs:element type="xs:string" name="scriptName"/>
+    </xs:choice>
+    <xs:attribute type="xs:string" name="name" use="required"/>
+    <xs:attribute type="xs:string" name="tableName" use="required"/>
+    <xs:attribute type="xs:string" name="root" use="optional"/>
+    <xs:attribute type="xs:string" name="filter" use="optional"/>
+    <xs:attribute type="xs:string" name="active" use="optional"/>
+    <xs:attribute type="xs:string" name="parentInstance" use="optional"/>
+    <xs:attribute type="xs:string" name="resourceId" use="optional"/>
+  </xs:complexType>
+</xs:schema>

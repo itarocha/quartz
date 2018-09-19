@@ -14,39 +14,34 @@ import org.quartz.impl.StdSchedulerFactory;
 
 import br.itarocha.quartz.SimpleJob;
 
-public class Siqued {
+public class Agd {
 
-	public static void main(String... args) throws SchedulerException {
-		System.out.println("oua");
-		Siqued s = new Siqued();
-		try {
-			s.go();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+	private static SchedulerFactory sf;
+	private static Scheduler sched;
+	private static JobDetail job;
+	private static CronTrigger tg;
+	private static Trigger trigger1; 
 	
-	public void go() throws SchedulerException, InterruptedException {
+	public static void start() throws SchedulerException, InterruptedException {
 
 		//https://www.baeldung.com/quartz
 		//http://www.quartz-scheduler.org/documentation/quartz-2.x/cookbook/MonthlyTrigger.html
 
-		SchedulerFactory sf = new StdSchedulerFactory();
-		Scheduler sched = sf.getScheduler();
+		sf = new StdSchedulerFactory();
+		sched = sf.getScheduler();
 		
-		JobDetail job = JobBuilder.newJob((SimpleJob.class))
+		job = JobBuilder.newJob((SimpleJob.class))
 				.withIdentity("myJob", "group1")
 				.usingJobData("jobSays", "Hello World")
 				.usingJobData("myFloatValue",3.141f)
 				.build();
 		
-		CronTrigger tg = TriggerBuilder.newTrigger()
+		tg = TriggerBuilder.newTrigger()
 				.withIdentity("trigger1", "group1")
 				.withSchedule(CronScheduleBuilder.cronSchedule("0,30 * * * * ?"))
 				.build();
 
-		Trigger trigger1 = TriggerBuilder.newTrigger()
+		trigger1 = TriggerBuilder.newTrigger()
 			    .withIdentity("Priority1Trigger5SecondRepeat")
 			    //.startAt(startTime)
 			    .startNow()
@@ -63,9 +58,17 @@ public class Siqued {
 		sched.scheduleJob(trigger1);
 		sched.start();
 		
-		Thread.sleep(300L * 1000L);
-		sched.shutdown(true);
-		System.out.println("\n\nFIM");
-		
+	}
+	
+	public static boolean stop() throws Exception {
+		try {
+			boolean retorno = true;
+			if (sched != null) {
+				sched.shutdown(true);
+			}
+			return retorno;
+		} catch (Exception ignored) {
+		}
+		return false;
 	}
 }

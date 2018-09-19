@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="control" type="TControl"/>
+  
+  <!-- Pode ser colocado em qualquer ordem. É obrigatório. Elemento PT_BR é obrigatório. Outros são opcionais -->
+  <xs:complexType name="TDescriptions">
+    <xs:all maxOccurs="1">
+      <xs:element type="xs:string" name="PT_BR" maxOccurs="1"/>
+      <xs:element type="xs:string" name="EN_US" minOccurs="0" maxOccurs="1"/>
+      <xs:element type="xs:string" name="ES_ES" minOccurs="0" maxOccurs="1"/>
+    </xs:all>
+  </xs:complexType>
+  
+  <xs:complexType name="TCtrlRelationship">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="toCtrl" use="optional"/>
+        <xs:attribute type="xs:int" name="order" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  
+  <xs:complexType name="TRelationships">
+    <xs:sequence>
+      <xs:element type="TCtrlRelationship" name="ctrlRelationship" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  
+  <xs:complexType name="TControl">
+    <xs:sequence>
+      <xs:element type="TDescriptions" name="descriptions"/>
+      <xs:element type="xs:string" name="url"/>
+      <xs:element name="properties">
+        <xs:complexType mixed="true">
+          <xs:sequence>
+            <xs:element type="TProperty" name="property" maxOccurs="unbounded" minOccurs="0"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element type="TRelationships" name="relationships" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="name" use="required"/>
+    <xs:attribute type="xs:string" name="type" use="required"/>
+    <xs:attribute type="xs:string" name="childrenType" use="optional"/>
+  </xs:complexType>
+  
+  <xs:complexType name="TProperty">
+    <xs:sequence>
+      <xs:element type="xs:string" name="key"/>
+      <xs:element type="xs:string" name="value"/>
+    </xs:sequence>
+  </xs:complexType>
+  
+  <xs:complexType name="TProperties">
+    <xs:sequence>
+      <xs:element type="TProperty" name="property" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

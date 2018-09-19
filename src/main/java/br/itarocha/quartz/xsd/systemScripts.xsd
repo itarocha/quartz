@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="systemScripts" type="TSystemScripts"/>
+
+  <xs:complexType name="TScript">
+    <xs:sequence>
+      <xs:element type="xs:string" name="nome"/>
+      <xs:element type="xs:string" name="tipo"/>
+      <xs:element type="xs:string" name="conteudo"/>
+    </xs:sequence>
+  </xs:complexType>
+  
+  <xs:complexType name="TSystemScripts">
+    <xs:sequence>
+      <xs:element type="TScript" name="script" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
